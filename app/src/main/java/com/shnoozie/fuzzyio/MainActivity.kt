@@ -34,5 +34,9 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+
+        //Move this to a service probably so it can be a notification.
+
     }
 }
