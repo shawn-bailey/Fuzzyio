@@ -5,7 +5,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 
-private const val NOTIFICATION_CHANNEL_ID = "noise_channel"
+const val NOTIFICATION_CHANNEL_ID = "noise_channel"
 
 class NotificationManager(val context: Context) {
 
