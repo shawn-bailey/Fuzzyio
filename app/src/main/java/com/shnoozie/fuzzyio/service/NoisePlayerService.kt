@@ -3,10 +3,15 @@ package com.shnoozie.fuzzyio.service
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
 import android.media.MediaPlayer
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.PackageManagerCompat
 import com.shnoozie.fuzzyio.R
 
 const val PLAY_PAUSE = "PLAY_PAUSE"
@@ -36,7 +41,8 @@ class NoisePlayerService : Service() {
 
     private fun sendNotification() {
 
-        val style = androidx.media3. .NotificationCompat.MediaStyle()
+        val style = androidx.media.app.NotificationCompat.MediaStyle()
+            .setShowActionsInCompactView(0,1,2)
 
 
         val icon = if (mediaPlayer.isPlaying) {
@@ -50,6 +56,17 @@ class NoisePlayerService : Service() {
             .setSmallIcon( (R.drawable.ic_launcher_foreground))
             .addAction(icon, "Play", createActionIntent())
             .build()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                startForeground(1, notification, FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
+            } else {
+                //No notification permission
+            }
+        } else {
+            startForeground(1, notification)
+        }
 
     }
 
